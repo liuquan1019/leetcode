@@ -61,3 +61,43 @@ public:
 				return maxSize;
 	}
 };
+//third edition
+class Solution {
+public:
+	int maximalRectangle(vector<vector<char> > &matrix) {
+		// Start typing your C/C++ solution below
+		// DO NOT write int main() function
+		int row = matrix.size();
+		if(row == 0)return 0;
+		int col = matrix[0].size();
+		vector<int> h(col,0);
+		int maxSize = 0,cnt = 0;
+		for(int i = 0;i < row;i++){
+			for(int j = 0;j < col;j++){
+				if(matrix[i][j] == '1')h[j]++;
+				else h[j] = 0;
+			}
+			stack<int> st;
+			for(int j = 0;j < col;j++){
+				if(st.empty() || h[j] >= st.top())st.push(h[j]);
+				else{
+					cnt = 0;
+					while(!st.empty() && st.top() > h[j]){
+						cnt++;
+						maxSize = max(maxSize,st.top() * cnt);
+						st.pop();
+					}
+					cnt++;
+					while(cnt > 0){st.push(h[j]);cnt--;}
+				}
+			}
+			cnt = 0;
+			while(!st.empty()){
+				cnt++;
+				maxSize = max(maxSize,st.top() * cnt);
+				st.pop();
+			}
+		}
+		return maxSize;
+	}
+};
